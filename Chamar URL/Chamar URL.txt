@@ -1,1 +1,0 @@
-<?php echo $this->getSkinUrl();?> ========= Skin do Template

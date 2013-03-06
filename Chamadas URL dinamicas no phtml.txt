@@ -1,0 +1,2 @@
+<?php echo $this->getSkinUrl();?> ========= Skin do Template
+<?php echo $this->getBaseUrl();?> ========= Base do Site
