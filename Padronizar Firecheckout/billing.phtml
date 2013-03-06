@@ -1,0 +1,281 @@
+<script>
+function MM_formtCep(e,src,mask) {
+        if(window.event) { _TXT = e.keyCode; } 
+        else if(e.which) { _TXT = e.which; }
+        if(_TXT > 47 && _TXT < 58) { 
+  var i = src.value.length; var saida = mask.substring(0,1); var texto = mask.substring(i)
+  if (texto.substring(0,1) != saida) { src.value += texto.substring(0,1); } 
+     return true; } else { if (_TXT != 8) { return false; } 
+  else { return true; }
+        }
+}
+</script>
+
+<?php //verifica se modulo auto-complete esta ativo! 
+	$ac = Mage::getStoreConfig('shipping/autocomplete/habilitar'); $ep = Mage::getStoreConfig('shipping/autocomplete/exibir_pais');
+?>
+
+<script type="text/javascript">
+var $b = jQuery.noConflict()
+$b(document).ready(function(){
+        $b("input.taxvat").mask("999.999.999-99");
+        $b("input.postcode").mask("99999-999");
+		$b("input.telephone").mask("(99)9999-9999");
+});
+</script>
+
+<script type='text/javascript'>//<![CDATA[ 
+var $m = jQuery.noConflict()
+$m(window).load(function(){
+$m('input[name*="[fax]"]').keydown( function(e){
+    if (e.keyCode >= 9){
+        length = this.value.length;
+        if (length == 0)
+          this.value += "(";
+        
+        if (length == 3)
+          this.value += ")";  
+        /*
+        Testa para ver se o ddd começa com 11 e coloca maxlength para 14 
+                exemplo: (11)95345-1234 que antes era assim (11)5345-1234
+        */        
+        if(/(\(11\)9(5[0-9]|6[0-9]|7[01234569]|8[0-9]|9[0-9])).+/i.test(this.value)){ 
+            $m(this).attr('maxlength','14');
+            if (length == 9)
+              this.value += "-";  
+        } else {
+            $m(this).attr('maxlength','13');        
+            if (length == 8)
+              this.value += "-";   
+        }        
+    }
+});
+
+});//]]>  
+
+</script>
+
+<div id="billing-address" class="firecheckout-section">
+    <?php if (!$this->canShip() || !Mage::getStoreConfig('firecheckout/general/shipping_address')): ?>
+        <div class="block-title"><span><?php echo $this->helper('checkout')->__('Address'); ?></span></div>
+    <?php else: ?>
+        <div class="block-title"><span><?php echo $this->helper('checkout')->__('Billing Address'); ?></span></div>
+    <?php endif; ?>
+    <ul class="form-list">
+    <?php if ($this->customerHasAddresses()): ?>
+        <li class="wide">
+            <label for="billing-address-select"><?php echo $this->helper('checkout')->__('Select a billing address from your address book or enter a new address.') ?></label>
+            <div class="input-box">
+                <?php echo $this->getAddressesHtmlSelect('billing') ?>
+            </div>
+        </li>
+    <?php endif; ?>
+    <li id="billing-new-address-form"<?php if ($this->customerHasAddresses()): ?> style="display:none;"<?php endif; ?>>
+        <fieldset>
+            <input type="hidden" name="billing[address_id]" value="<?php echo $this->getAddress()->getId() ?>" id="billing:address_id" />
+            <ul>
+                <li class="fields"><?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getAddress())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?></li>
+                <?php if ('hidden' !== Mage::getStoreConfig('firecheckout/address_form/company') || !$this->isCustomerLoggedIn())  : ?>
+                <li class="fields">
+                    <?php if(!$this->isCustomerLoggedIn()): ?>
+                        <div class="field">
+                            <label for="billing:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="billing[email]" id="billing:email" value="<?php echo $this->htmlEscape($this->getAddress()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
+                            </div>
+                        </div>
+                    <?php endif ?>
+                    <?php if ('hidden' !== Mage::getStoreConfig('firecheckout/address_form/company')) : ?>
+                        <div class="field">
+                            <label for="billing:company"<?php echo ('required' === Mage::getStoreConfig('firecheckout/address_form/company')) ? ' class="required"><em>*</em' : '' ?>><?php echo $this->__('Company') ?></label>
+                            <div class="input-box">
+                                <input type="text" id="billing:company" name="billing[company]" value="<?php echo $this->htmlEscape($this->getAddress()->getCompany()) ?>" title="<?php echo $this->__('Company') ?>" class="input-text<?php echo ('required' === Mage::getStoreConfig('firecheckout/address_form/company')) ? ' required-entry' : '' ?>" />
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </li>
+                <?php endif; ?>
+              <?php if ($ac) { ?>
+                <li class="fields">
+                    <div class="field">
+                        <label for="billing:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international required-entry postcode" onblur="buscar_end('billing');" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>&nbsp;</label>
+                        <div id="load-end-billing" class="input-box"><a href="http://www.buscacep.correios.com.br/servicos/dnec/menuAction.do?Metodo=menuLogradouro" target="_blank" style="font-size: 13px; color: #1D7FC8; text-decoration: underline; line-height: 26px;">N&atilde;o sabe seu CEP?</a></div>
+                    </div>
+                </li>
+                <?php } ?>
+                <?php if ($ac) { ?>
+                <li class="fields">
+                	<div class="field">
+	                    <label for="billing:street1" class="required"><em>*</em><?php echo $this->__('Address') ?></label>
+	                    <div class="input-box">
+	                        <input type="text" title="<?php echo $this->__('Street Address') ?>" name="billing[street][]" id="billing:street1" value="<?php echo $this->htmlEscape($this->getAddress()->getStreet(1)) ?>" class="input-text required-entry" />
+	                    </div>
+                <?php } else { ?>
+                <li class="wide">
+                    <label for="billing:street1" class="required"><em>*</em><?php echo $this->__('Address') ?></label>
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Street Address') ?>" name="billing[street][]" id="billing:street1" value="<?php echo $this->htmlEscape($this->getAddress()->getStreet(1)) ?>" class="input-text required-entry" />
+                    </div>
+                </li>
+                <?php } ?>
+        <?php for ($_i=2, $_n=$this->helper('customer/address')->getStreetLines(); $_i<=$_n; $_i++): ?>
+                <?php if ($ac) { ?>
+                <?php if ($_i==3) { ?><li class="fields"><?php } ?>
+	                	<?php if ($_i==2) { ?></div><div class="field"><label for="billing:street2" class="required"><em>*</em><?php echo $this->__('Number') ?></label><?php } ?>
+	                	<?php if ($_i==3) { ?><div class="field"><label for="billing:street3"><?php echo $this->__('Completion') ?></label><?php } ?>
+	                	<?php if ($_i==4) { ?><div class="field"><label for="billing:street4" class="required"><em>*</em><?php echo $this->__('Region') ?></label><?php } ?>
+	                    <div class="input-box">
+	                        <input type="text" title="<?php echo $this->__('Street Address %s', $_i) ?>" name="billing[street][]" id="billing:street<?php echo $_i?>" value="<?php echo $this->htmlEscape($this->getAddress()->getStreet($_i)) ?>" class="input-text" />
+	                    </div>
+	                </div>
+                <?php if ($_i==2||$_i==4) { ?></li><?php } ?>
+                <?php } else { ?>
+                <li class="wide">
+                	<div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Street Address %s', $_i) ?>" name="billing[street][]" id="billing:street<?php echo $_i?>" value="<?php echo $this->htmlEscape($this->getAddress()->getStreet($_i)) ?>" class="input-text" />
+                    </div>
+                </li>
+                <?php } ?>
+        <?php endfor ?>
+                <li class="fields">
+                    <div class="field">
+                        <label for="billing:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" class="input-text required-entry" id="billing:city" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                        <div class="input-box">
+                            <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
+                                <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                            </select>
+                            <script type="text/javascript">
+							var $d = jQuery.noConflict()
+                            //<![CDATA[
+                                $d('billing:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
+                            //]]>
+                            </script>
+                            <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none;" />
+                        </div>
+                    </div>
+                </li>
+                <li class="fields">
+                	<?php if (!$ac) { ?>
+					<div class="field">
+                        <label for="billing:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international required-entry" />
+                        </div>
+                    </div>
+                    <?php } ?>
+                    <div class="field <?php if ($ac && !$ep) echo 'no-display'; ?>">
+                        <label for="billing:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
+                        <div class="input-box">
+                            <?php echo $this->getCountryHtmlSelect('billing') ?>
+                        </div>
+                    </div>
+                </li>
+                <?php if ('hidden' !== Mage::getStoreConfig('firecheckout/address_form/phone') || 'hidden' !== Mage::getStoreConfig('firecheckout/address_form/fax')) : ?>
+                <li class="fields">
+                    <?php if ('hidden' !== Mage::getStoreConfig('firecheckout/address_form/phone')) : ?>
+                    <div class="field">
+                        <label for="billing:telephone"<?php echo ('required' === Mage::getStoreConfig('firecheckout/address_form/phone')) ? ' class="required"><em>*</em' : '' ?>><?php echo $this->__('Telephone') ?></label>
+                        <div class="input-box">
+                            <input type="text" name="billing[telephone]" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="telephone input-text<?php echo ('required' === Mage::getStoreConfig('firecheckout/address_form/phone')) ? ' required-entry' : '' ?>" id="billing:telephone" maxlength="13" onkeypress="return txtBoxFormat('billing:telephone', '(99)9999-9999', event);" />
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if ('hidden' !== Mage::getStoreConfig('firecheckout/address_form/fax')) : ?>
+                    <div class="field">
+                        <label for="billing:fax"<?php echo ('required' === Mage::getStoreConfig('firecheckout/address_form/fax')) ? ' class="required"><em>*</em' : '' ?>><?php echo $this->__('Celular') ?></label>
+                        <div class="input-box">
+                            <input type="text" name="billing[fax]" value="<?php echo $this->htmlEscape($this->getAddress()->getFax()) ?>" title="<?php echo $this->__('Fax') ?>" class="input-text<?php echo ('required' === Mage::getStoreConfig('firecheckout/address_form/fax')) ? ' required-entry' : '' ?>" id="billing:fax" />
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                </li>
+                <?php endif; ?>
+                <?php if (!$this->isCustomerLoggedIn()) : ?>
+                    <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
+                    <?php $_gender = $this->getLayout()->createBlock('customer/widget_gender') ?>
+                    <?php if ($_dob->isEnabled() || $_gender->isEnabled()): ?>
+                        <li class="fields">
+                        <?php if ($_dob->isEnabled()): ?>
+                            <div class="field">
+                                <?php echo $_dob->setDate($this->getQuote()->getCustomerDob())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($_gender->isEnabled()): ?>
+                            <div class="field">
+                                <?php echo $_gender->setGender($this->getQuote()->getCustomerGender())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                            </div>
+                        <?php endif ?>
+                        </li>
+                    <?php endif ?>
+                <?php endif; ?>
+
+                    <?php $_taxvat = $this->getLayout()->createBlock('customer/widget_taxvat') ?>
+                    <?php if ($_taxvat->isEnabled()): ?>
+                        <li class="wide">
+                            <?php echo $_taxvat->setTaxvat($this->getQuote()->getCustomerTaxvat())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                        </li>
+                    <?php endif ?>
+
+                <?php if (!$this->isCustomerLoggedIn()) : ?>
+                    <?php $registrationMode = Mage::getStoreConfig('firecheckout/general/registration_mode');
+                    if ('optional' == $registrationMode) : ?>
+                        <li class="control" style="display:none;">
+                            <input type="checkbox" name="billing[register_account]" value="1" title="<?php echo $this->__('Criar uma conta') ?>" id="billing:register_account" onclick="if(window.billing) billing.setCreateAccount(this.checked);"<?php if ($this->getAddress()->getRegisterAccount()):?> checked="checked"<?php endif;?> class="checkbox" /><label for="billing:register_account"><?php echo $this->__('Criar uma conta') ?></label>
+                        </li>
+                    <?php else: ?>
+                        <li>
+                            <input type="hidden" name="billing[register_account]" value="1"/>
+                        </li>
+                    <?php endif ?>
+                    <li class="fields" id="register-customer-password" <?php if ('optional' == $registrationMode || 'hidden' == $registrationMode) : ?>style="display: none;" <?php endif; ?>>
+                        <div class="field">
+                            <label for="billing:customer_password" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
+                            <div class="input-box">
+                                <input type="password" name="billing[customer_password]" id="billing:customer_password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="billing:confirm_password" class="required"><em>*</em><?php echo $this->__('Confirm Password') ?></label>
+                            <div class="input-box">
+                                <input type="password" name="billing[confirm_password]" title="<?php echo $this->__('Confirm Password') ?>" id="billing:confirm_password" class="input-text required-entry validate-cpassword" />
+                            </div>
+                        </div>
+                    </li>
+                <?php endif; ?>
+                <?php if ($this->isCustomerLoggedIn() && $this->customerHasAddresses()):?>
+                    <li class="control">
+                        <input type="checkbox" name="billing[save_in_address_book]" value="1" title="<?php echo $this->__('Save in address book') ?>" id="billing:save_in_address_book" <?php if ($this->getAddress()->getSaveInAddressBook()):?> checked="checked"<?php endif;?> class="checkbox" /><label for="billing:save_in_address_book"><?php echo $this->__('Save in address book') ?></label>
+                    </li>
+                <?php else:?>
+                    <li class="no-display"><input type="hidden" name="billing[save_in_address_book]" value="1" /></li>
+                <?php endif; ?>
+            </ul>
+        </fieldset>
+    </li>
+    </ul>
+    <?php if (!$this->canShip() || !Mage::getStoreConfig('firecheckout/general/shipping_address')): ?>
+        <input type="hidden" name="billing[use_for_shipping]" value="1" />
+    <?php else: ?>
+        <input type="hidden" name="billing[use_for_shipping]" id="billing:use_for_shipping" value="<?php if ($this->isUseBillingAddressForShipping()):?>1<?php else:?>0<?php endif; ?>" />
+    <?php endif; ?>
+    <script type="text/javascript">
+    //<![CDATA[
+        var billing = new Billing();
+        RegionUpdater.prototype.setMarkDisplay = function(){};
+        ZipUpdater.prototype._setPostcodeOptional = function(){};
+        var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id', countryRegions, undefined, 'billing:postcode');
+    //]]>
+    </script>
+</div>

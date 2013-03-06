@@ -1,0 +1,32 @@
+Here i got solution for it just replace text shown in below.
+
+change line 1214 of app/code/core/Mage/Sales/Model/Order.php from-------------------
+
+$shippingMethod = parent::getShippingMethod();
+
+to--------------------------------------
+
+$shippingMethod = $this->getData('shipping_method');
+
+I hope this work for you.
+
+
+========================================= e ========================================
+
+app/code/core/Mage/Adminhtml/Block/Sales/Order/Shipment/Create/Items.php on line 132
+
+The poison----------------------------------------
+public function canCreateShippingLabel()
+    {
+      return $this->getOrder()->getShippingCarrier()->isShippingLabelsAvailable();
+    }
+The solution---------------------------------------
+  public function canCreateShippingLabel()
+    {
+      $carrier = $this->getOrder()->getShippingCarrier();
+      if(method_exists($carrier, 'isShippingLabelsAvailable')) {
+        return $carrier->isShippingLabelsAvailable();
+      } else {
+        return false;
+      }
+    }

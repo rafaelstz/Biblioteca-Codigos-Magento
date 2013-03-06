@@ -1,0 +1,9 @@
+<reference name="product.info">
+    <action method="setTemplate"> <template>catalog/product/view6_faibber.phtml</template></action>
+</reference>
+<reference name="right">
+<block type="core/template" name="right.permanent.callout" template="callouts/right_col2.phtml"></block>
+<remove name="catalog.compare.sidebar"/>
+<remove name="right.reports.product.viewed"/>
+<remove name="right.reports.product.compared"/>
+</reference>

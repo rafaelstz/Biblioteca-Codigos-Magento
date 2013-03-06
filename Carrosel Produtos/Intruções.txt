@@ -1,0 +1,19 @@
+========== CMS da página coloque:
+
+{{block type="catalog/product_list" category_id="10" column_count="8" num_products="999" template="catalog/product/list2.phtml"}}
+
+========== CSS do carrosel é:
+
+#slider{border-style:solid;padding: 0px 0px 0px 5px;overflow: hidden;
+/* Firefox v1.0+ */-moz-border-radius:10px;
+/* Safari v3.0+ and by Chrome v0.2+ */-webkit-border-radius:10px;
+/* Firefox v4.0+ , Safari v5.0+ , Chrome v4.0+ , Opera v10.5+  and by IE v9.0+ */border-radius:10px;border-width:1px;border-color:rgb(204,204,204);width:963px;
+/* Firefox v3.6+ */background-image:-moz-linear-gradient(50% 0% -90deg,rgb(239,239,239) 0%,rgb(255,255,255) 100%); 
+/* safari v4.0+ and by Chrome v3.0+ */background-image:-webkit-gradient(linear,50% 0%,50% 100%,color-stop(0, rgb(239,239,239)),color-stop(1, rgb(255,255,255)));
+/* Chrome v10.0+ and by safari nightly build*/background-image:-webkit-linear-gradient(-90deg,rgb(239,239,239) 0%,rgb(255,255,255) 100%);
+/* Opera v11.10+ */background-image:-o-linear-gradient(-90deg,rgb(239,239,239) 0%,rgb(255,255,255) 100%);
+/* IE v10+ */background-image:-ms-linear-gradient(-90deg,rgb(239,239,239) 0%,rgb(255,255,255) 100%);background-image:linear-gradient(-90deg,rgb(239,239,239) 0%,rgb(255,255,255) 100%);
+-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#ffefefef,endColorstr=#ffffffff,GradientType=0)";
+filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#ffefefef,endColorstr=#ffffffff,GradientType=0);}
+.next{background: url('images/next.png') no-repeat;width: 14px;height: 22px;position: relative;top: 120px;left: 933px;display: block;cursor: pointer;z-index: 9999;}
+.prev{background: url('images/prev.png') no-repeat;width: 14px;height: 22px;position: relative;top: 120px;right: -8px;display: block;cursor: pointer;z-index: 9999;display: none;}

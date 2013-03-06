@@ -1,0 +1,222 @@
+<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<script type="text/javascript">
+//<![CDATA[
+function buscar_end( local ) { 
+	if ($(local+':street1')) 	$(local+':street1').value = '';
+	if ($(local+':street2')) 	$(local+':street2').value = '';
+	if ($(local+':street3')) 	$(local+':street3').value = '';
+	if ($(local+':street4')) 	$(local+':street4').value = '';
+	if ($(local+':city')) 		$(local+':city').value = '';
+	if ($(local+':region')) 	$(local+':region').value = '';
+	if ($(local+':region_id')) 	$(local+':region_id').value = '';
+
+	var urlAjax = location.href;
+	var validarUrl = /^https:\/\//;
+
+	if ( urlAjax.match( validarUrl ) ) {
+		urlAjax = '<?php echo Mage::getBaseUrl("link", true)."enderecos/ajax" ?>';
+	} else {
+		urlAjax = '<?php echo $this->getUrl("enderecos/ajax") ?>';
+	}
+
+	new Ajax.Request( urlAjax, {method: 'POST',
+								parameters: 'cep='+$( local+':postcode' ).value,
+								evalScripts: true,
+								onLoading: function(transport) {
+									$('load-end-'+local).innerHTML = '<img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif');?>" /> <span style="color: #888;"><?php echo $this->__('Loading...') ?></span>';
+								},
+								onComplete: function(transport) {
+									$('load-end-'+local).innerHTML = '<a href="http://www.buscacep.correios.com.br/servicos/dnec/menuAction.do?Metodo=menuLogradouro" target="_blank"><?php echo $this->__('Dont know the cep?') ?></a>';
+								},
+								onSuccess: function(transport) {
+									if (200 == transport.status) {
+					                    try {
+					                    	var res = transport.responseText.evalJSON();
+	
+											if ( res.resultado > 0 ) {
+												$(local+':street1').value = res.tipo_logradouro+' '+res.logradouro;
+												//street2 = numero do endereco
+												//street3 = complemento
+												if ($(local+':street4')) $(local+':street4').value = res.bairro;
+												$(local+':city').value = res.cidade;
+												$(local+':region').value = res.uf;
+
+												for (var obj in countryRegions['BR'] ) {
+													if ( res.uf == countryRegions['BR'][obj].code ) {
+														$(local+':region_id').value = obj;
+													} 
+												} 
+											}
+					                    } catch(e) {
+					                        //alert( e.message );
+					                    }
+									} else {
+										//alert( transport );
+									}
+				                },
+								onFailure: function() { /*document.getElementById("...").innerHTML = 'problemas...';*/ }
+							});
+}
+//]]>
+</script>
+
+<div class="page-title checkout-title">
+    <h1><?php echo Mage::getStoreConfig('firecheckout/general/title') ?></h1>
+    <?php if (!Mage::getSingleton('customer/session')->isLoggedIn()) : ?>
+    <p class="firecheckout-login-wrapper">
+        <a href="<?php echo $this->getUrl('customer/account/login') ?>" class="firecheckout-login">
+            <span><span><?php echo $this->__('Already registered? Login into your account') ?></span></span>
+        </a>
+    </p>
+    <?php endif; ?>
+</div>
+
+<?php
+    echo $this->getMessagesBlock()->getGroupedHtml();
+    $this->getMessagesBlock()->getMessageCollection()->clear();
+?>
+
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/firecheckout.js') ?>"></script>
+<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<script type="text/javascript">
+//<![CDATA[
+    FireCheckout.prototype.ajax = {
+    <?php
+        $json = '';
+        foreach (Mage::getStoreConfig('firecheckout/ajax_update') as $key => $value):
+            $json .= $key . ':' . (int)$value . ",\n";
+        endforeach;
+        echo $this->htmlEscape(substr($json, 0, -2));
+    ?>
+    };
+//]]>
+</script>
+
+<form action="" id="firecheckout-form">
+<?php $layout = Mage::getStoreConfig('firecheckout/general/layout'); ?>
+<div class="<?php echo $layout ?> firecheckout-set">
+    <div class="col-1">
+        <?php echo $this->getChildHtml('billing.address') ?>
+        <?php echo $this->getChildHtml('shipping.address') ?>
+    </div>
+
+    <div class="col-2">
+
+        <?php if ('col2-set' === $layout) : ?>
+            <div class="col2-set">
+                <div class="col-1">
+        <?php endif; ?>
+
+        <?php echo $this->getChildHtml('shipping.method') ?>
+
+        <?php if ('col2-set' === $layout) : ?>
+                </div>
+                <div class="col-2">
+        <?php endif; ?>
+
+        <?php echo $this->getChildHtml('payment.method') ?>
+        <?php if ($j2tRewardPoints = $this->getChildHtml('coupon_points')): // rewardpoints extension override standard discount block too ?>
+            <div id="checkout-rewardpoints-load">
+                <?php echo $j2tRewardPoints ?>
+            </div>
+        <?php else: ?>
+            <div id="checkout-coupon-discount-load">
+                <?php echo $this->getChildHtml('coupon') ?>
+            </div>
+        <?php endif; ?>
+        <div id="checkout-giftcard-load">
+            <?php echo $this->getChildHtml('giftcard') ?>
+        </div>
+
+        <?php if ('col2-set' === $layout) : ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+    <?php if ('col3-set' === $layout) : ?>
+    </div>
+    <div class="col-3">
+    <?php endif; ?>
+
+        <?php echo $this->getChildHtml('review') ?>
+
+    </div>
+</div>
+</form>
+
+<?php echo $this->getChildHtml('customer.login') ?>
+<?php echo $this->getChildHtml('customer.forgot') ?>
+<?php if (version_compare(Mage::getVersion(), '1.6.0.0') >= 0) : ?>
+    <?php echo $this->getChildHtml('persistent.login') ?>
+<?php endif; ?>
+<div id="checkout-centinel-iframe-load" style="display: none;"></div>
+<div id="checkout-paypaliframe-load" class="authentication" style="display: none;"></div>
+<div id="checkout-sagepay-iframe-load"></div>
+
+<script type="text/javascript">
+//<![CDATA[
+    <?php $_isSecure = $this->getRequest()->isSecure(); ?>
+    var checkout = new FireCheckout('firecheckout-form', {
+        success         : '<?php echo $this->getUrl('firecheckout/index/success',            array('_secure'=>$_isSecure)) ?>',
+        save            : '<?php echo $this->getUrl('firecheckout/index/saveOrder',          array('_secure'=>$_isSecure)) ?>',
+        billing_address : '<?php echo $this->getUrl('firecheckout/index/saveBilling',        array('_secure'=>$_isSecure)) ?>',
+        shipping_address: '<?php echo $this->getUrl('firecheckout/index/saveShipping',       array('_secure'=>$_isSecure)) ?>',
+        shipping_method : '<?php echo $this->getUrl('firecheckout/index/saveShippingMethod', array('_secure'=>$_isSecure)) ?>',
+        payment_method  : '<?php echo $this->getUrl('firecheckout/index/savePayment',        array('_secure'=>$_isSecure)) ?>',
+        coupon          : '<?php echo $this->getUrl('firecheckout/index/saveCoupon',         array('_secure'=>$_isSecure)) ?>',
+        giftcard        : '<?php echo $this->getUrl('firecheckout/index/saveGiftcard',       array('_secure'=>$_isSecure)) ?>',
+        paymentdata     : '<?php echo $this->getUrl('firecheckout/index/savePaymentData',    array('_secure'=>$_isSecure)) ?>',
+        presave         : '<?php echo $this->getUrl('firecheckout/index/preSaveOrder',       array('_secure'=>$_isSecure)) ?>',
+        shopping_cart   : '<?php echo $this->getUrl('firecheckout/index/saveCart',           array('_secure'=>$_isSecure)) ?>',
+        failure         : '<?php echo $this->getUrl('checkout/cart') ?>'
+    }, {
+        acceptAgreementText: "<?php echo $this->__('Please agree to all the terms and conditions before placing the order.') ?>",
+        spinnerText        : "<?php echo $this->__('Please wait...') ?>",
+        productRemoveConfirm: "<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>"
+    });
+
+    document.observe("dom:loaded", function() {
+        var triggers = {
+            login: {
+                el    : $$('.firecheckout-login'),
+                event : 'click',
+                window: $('firecheckout-login-window'),
+                size: {
+                    maxWidth: 300
+                }
+            },
+            forgot: {
+                el    : $$('.firecheckout-forgot'),
+                event : 'click',
+                window: $('firecheckout-forgot-window'),
+                size: {
+                    maxWidth: 300
+                }
+            }
+        };
+        $$('.checkout-agreements .agree a').each(function(el) {
+            triggers[el.className] = {
+                el    : $$('.' + el.className),
+                event : 'click',
+                window: $(el.className + '-window'),
+                actionbar: {
+                    html    : '<a href="javascript:void(0)" class="btn-agree" id="' + el.className + '-button" title="' + el.innerHTML + '">' + el.innerHTML + '</a>',
+                    el      : el.className + '-button',
+                    event   : 'click',
+                    callback: function(e, id) {
+                        if (typeof event != 'undefined') { // ie9 fix
+                            event.preventDefault ? event.preventDefault() : event.returnValue = false;
+                        }
+                        e.stop();
+                        $(id).checked = 'checked';
+                        this.hide();
+                    }
+                }
+            };
+        });
+        firecheckoutWindow = new FireCheckout.Window({
+            triggers: triggers
+        });
+    });
+//]]>
+</script>

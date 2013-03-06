@@ -1,0 +1,75 @@
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php $_productCollection=$this->getLoadedProductCollection() ?> <?php if(!$_productCollection->count()): ?> <div class="padder"> <div class="note-msg">
+    <?php echo $this->__('There are no products matching the selection.') ?> </div> </div> <?php else: ?>
+
+<?php // Grid Mode ?>
+<script>
+    
+</script>
+<div id="slider">
+  <script>
+    function voltarSlide(){
+      document.getElementById("slideCarrosel").style.left="0px";
+      document.getElementById("prev").style.display="none";
+      document.getElementById("next").style.display="block";
+
+    }
+    function irSlide(){
+      document.getElementById("slideCarrosel").style.position="relative";
+      document.getElementById("slideCarrosel").style.left="-940px";
+      document.getElementById("prev").style.display="block";
+      document.getElementById("next").style.display="none";
+    }
+  </script>
+<div id="prev" class="prev" onclick="voltarSlide()"></div>
+<div id="next" class="next" onclick="irSlide()"></div>
+
+<div id="slideCarrosel" class="listing-type-grid  catalog-listing padder"> <!-- the class name will change to .listing-type-cell if viewing in list mode --> <?php $img=0;?> <?php $_collectionSize = $_productCollection->count() ?>
+    <table cellspacing="0" class="generic-product-grid" id="product-list-table">
+    <tr>
+    <?php $i=1; foreach ($_productCollection as $_product): ?>
+        <td><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>"><?php echo $this->htmlEscape($_product->getName()) ?></a>   
+                               <div class="list">
+                               <table width="100%" cellpadding="0" cellspacing="0">
+                               
+                               <tr><td>
+                                   <a href="<?php echo $_product->getProductUrl() ?>"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(125, 125); ?>" alt="<?php echo $this->htmlEscape($this->getImageLabel($_product, 'small_image')) ?>" title="<?php echo $this->htmlEscape($this->getImageLabel($_product, 'small_image')) ?>" /></a>
+                               </td></tr>
+                               <tr>
+                                               <td>                                  
+                               <?php $img=$img+1; ?>
+
+                               
+                               <div style="clear: both;"/>
+                               </td></tr></table>
+                 </div>
+                               
+                               
+                               <?php echo $this->getPriceHtml($_product, true) ?>
+        </td>
+    <?php if ($i%8==0 && $i!=$_collectionSize): ?>
+    </tr>
+                
+    <?php 
+    break;
+                endif ?>
+                <?php $i++; ?>
+    <?php endforeach ?>
+    <?php for($i;$i%8!=0;$i++): ?>
+          <td class="empty-product">&nbsp;</td>
+    <?php endfor ?>
+    <?php if ($i%8==0): ?>
+    </tr>
+    <?php endif ?>
+    </table>
+    <script type="text/javascript">decorateTable('product-list-table')</script>
+</div>
+</div>
+
+<?php endif; ?>

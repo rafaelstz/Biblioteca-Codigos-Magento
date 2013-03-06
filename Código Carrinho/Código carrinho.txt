@@ -1,0 +1,33 @@
+<?php
+
+                    $count = $this->helper('checkout/cart')->getSummaryCount();  //get total items in cart
+
+                    $total = $this->helper('checkout/cart')->getQuote()->getGrandTotal(); //get total price
+
+                    if($count==0)
+
+                    {
+
+                   echo $this->__('Sem Itens',$count);
+
+                    }
+
+                    if($count==1)
+
+                    {
+
+                   echo $this->__(' Item %s',$count);
+
+                    }
+
+                    if($count>1)
+
+                    {
+
+                   echo $this->__(' Itens %s',$count);
+
+                    }
+
+                    echo $this->__(' | %s', $this->helper('core')->formatPrice($total, false));
+
+                ?>
