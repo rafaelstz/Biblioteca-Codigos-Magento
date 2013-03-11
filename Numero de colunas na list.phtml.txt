@@ -1,0 +1,10 @@
+No XML (app/design/frontend/Your Interface/layout/catalog.xml) ====================================
+
+<action method="setColumnCount"><columns>4</columns></action>
+
+No PHTML (app/design/frontend/Your Interface/template/catalog/product/list.phtml)==================
+Troque
+<?php $_columnCount = $this->getColumnCount(); ?>
+
+Por
+<?php $_columnCount = 4; ?>
