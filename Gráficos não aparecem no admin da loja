@@ -1,0 +1,5 @@
+Acesse o seguinte arquivo: \app\design\adminhtml\default\default\template\dashboard\graph.phtml
+
+Procure pela linha: “> getChartUrl(false) ?>” alt=”chart” title=”chart” />
+
+Altere para “true” a variável da função ChartUrl(), onde contém “false”.
