@@ -1,0 +1,23 @@
+Chamada de blocos inteiros
+
+=======================================
+
+<?php echo $this->getLayout()->createBlock('newsletter/subscribe')->setTemplate('newsletter/subscribe.phtml')->toHtml(); ?> 
+
+Chamada de blocos estáticos
+
+=======================================
+
+Arquivos .phtml =============
+
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('identificador')->toHtml() ?>
+
+Aruivos .xml =================
+
+<block type="cms/block" name="cms_test_block">
+    <action method="setBlockId"><block_id>identificador</block_id></action>
+</block>
+
+Arquivos CMS =================
+
+{{block type='cms/block' block_id='identificador'}}
