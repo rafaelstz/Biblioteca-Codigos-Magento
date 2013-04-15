@@ -1,5 +1,8 @@
+<?php $routeName = Mage::app()->getRequest()->getRouteName();
+$identifier = Mage::getSingleton('cms/page')->getIdentifier();
+
 if($routeName == 'cms' && $identifier == 'home') {
     echo 'You are in Homepage!';
 } else {
     echo 'You are NOT in Homepage!';
-}
+}?>
