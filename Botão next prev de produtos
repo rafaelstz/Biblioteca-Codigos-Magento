@@ -1,0 +1,78 @@
+  <?php
+// Previous Next links
+
+// gets latest searchvalue
+$query = Mage::getModel('catalogsearch/query')->getSuggestCollection();
+$timestamp = 0;
+$query_name;
+foreach($query as $q):
+    if($timestamp < strtotime($q['updated_at'])):
+        $timestamp = strtotime($q['updated_at']);
+        $query_name = $q['query'];
+    endif;
+endforeach;
+
+// gets search parameter (set at list.phtml if it was a searchinglist)
+$search_parameter = $_GET['search'];
+
+$sort = Mage::getModel('catalog/session');
+$order = strtolower($sort->getSortOrder());
+$direction = strtolower($sort->getSortDirection());
+if ($direction == "") {
+    $direction = 'asc';
+}
+if ($order == "") {
+    $order = Mage::getStoreConfig('catalog/frontend/default_sort_by');
+}
+
+$category_products = Mage::getModel('catalog/layer')->getProductCollection()->addAttributeToSort($order, $direction); // gets viewed catalog category collection, although does not get the layer collection 
+$search_products = Mage::getModel('catalogsearch/query')->loadByQueryText($query_name)->getResultCollection(); // gets searching product collection
+
+if($search_parameter):
+    $category_products = $search_products;
+endif;
+
+
+$category_products->addAttributeToFilter('status',1); // 1 or 2 
+$category_products->addAttributeToFilter('visibility',4); // 1.2.3.4 
+
+// Generate array from product collection products ids
+if($search_parameter):
+    // since addAttributeToSort() doesnt work for getResultCollection() sorting it by myself
+    $cat_prod_ids = array();
+    $cat_prod_ids2 = array();
+    foreach($category_products as $prod) {
+        $cat_prod_ids2[] = $prod->getId();
+    }
+    $e = count($cat_prod_ids2);
+    while($e >= 0) {
+        $cat_prod_ids[] = $cat_prod_ids2[$e];
+        $e--;
+    }
+else:
+    $cat_prod_ids = array();
+    foreach($category_products as $prod) {
+        $cat_prod_ids [] = $prod->getId();
+    }
+endif;
+// Determine the previous/next link and link to current category
+$_product_id = $_product->getId();
+$_pos = array_search($_product_id, $cat_prod_ids);
+$_next_pos = $_pos+1;
+$_prev_pos = $_pos-1;
+// get the next product url
+    if( isset($cat_prod_ids[$_next_pos]) ) {
+        $_next_prod = Mage::getModel('catalog/product')->load( $cat_prod_ids[$_next_pos] );
+    }
+    else {
+        $_next_prod = NULL;
+    }
+// get the prev product url
+    if( isset($cat_prod_ids[$_prev_pos]) ) {
+        $_prev_prod = Mage::getModel('catalog/product')->load( $cat_prod_ids[$_prev_pos] );
+    }
+    else {
+        $_prev_prod = NULL;
+    }
+// END prev next
+?>
