@@ -1,0 +1,147 @@
+  	   <br/>
+		   
+		   
+		   
+		   
+		   
+		   
+		   <div id="box-toggle">
+
+
+
+<div class="tgl">
+
+
+
+<div class="formedepagamento1"> Cart&atilde;o de Cr&eacute;dito Visa</div>
+
+<div style="border: 1px dotted #ccc; background: #fff; padding: 5px;    -moz-column-width: 70px;
+
+   -moz-column-gap: 14px;
+
+   -webkit-column-width: 66px;
+
+   -webkit-column-gap: 26px;
+
+   -webkit-column-rule: 1px solid #ccc;
+
+   -moz-column-rule: 1px solid #ccc; text-align: left; font-size: 14px; width: 330px;">
+
+   
+
+   <?php
+
+$_coreHelper = $this->helper('core');
+
+$vezes = $_product->getResource()->getAttribute('parcelavisa')->getFrontend()->getValue( $_product );
+
+
+
+for ( $i=1; $i <= $vezes; $i++ ) {
+
+echo '<small>'.$i.'x de '.$_coreHelper->currency( $_product->getFinalPrice()/$i, true, false ).'</small><br />';
+
+}
+
+?>		</div>	
+
+
+
+
+
+<br/>
+
+
+
+<div class="formedepagamento2"> Cart&atilde;o de Cr&eacute;dito Master Card</div>
+
+<div style="border: 1px dotted #ccc; background: #fff; padding: 5px;    -moz-column-width: 70px;
+
+   -moz-column-gap: 14px;
+
+   -webkit-column-width: 66px;
+
+   -webkit-column-gap: 26px;
+
+   -webkit-column-rule: 1px solid #ccc;
+
+   -moz-column-rule: 1px solid #ccc; text-align: left; font-size: 14px; width: 330px;">
+
+   
+
+   <?php
+
+$_coreHelper = $this->helper('core');
+
+$vezes = $_product->getResource()->getAttribute('parcelamaster')->getFrontend()->getValue( $_product );
+
+
+
+for ( $i=1; $i <= $vezes; $i++ ) {
+
+echo '<small>'.$i.'x de '.$_coreHelper->currency( $_product->getFinalPrice()/$i, true, false ).'</small><br />';
+
+}
+
+?>		</div>		
+
+
+
+
+
+<br/>
+
+
+
+<div class="formedepagamento3"> Cart&atilde;o de Cr&eacute;dito Dinners</div>
+
+<div style="border: 1px dotted #ccc; background: #fff; padding: 5px;    -moz-column-width: 70px;
+
+   -moz-column-gap: 14px;
+
+   -webkit-column-width: 66px;
+
+   -webkit-column-gap: 26px;
+
+   -webkit-column-rule: 1px solid #ccc;
+
+   -moz-column-rule: 1px solid #ccc; text-align: left; font-size: 14px; width: 330px;">
+
+   
+
+   <?php
+
+$_coreHelper = $this->helper('core');
+
+$vezes = $_product->getResource()->getAttribute('parceladinners')->getFrontend()->getValue( $_product );
+
+
+
+for ( $i=1; $i <= $vezes; $i++ ) {
+
+echo '<small>'.$i.'x de '.$_coreHelper->currency( $_product->getFinalPrice()/$i, true, false ).'</small><br />';
+
+}
+
+?>		</div>		
+
+
+<br/>
+
+<div class="formedepagamento4"> Boleto Banc&aacute;rio</div>
+
+<div style="border: 1px dotted #ccc; background: #fff; padding: 5px; text-align: left; font-size: 14px; width: 330px;">
+
+<div style="font-family: Arial, Verdana, Tahoma; font-size: 11px; margin-top: -12px;"><?php echo $this->getChildHtml('desconto');?></div>
+   
+</div>		
+
+		
+
+
+
+</div>
+
+
+
+</div>
