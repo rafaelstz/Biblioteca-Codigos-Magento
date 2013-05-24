@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Multikomerce_Freteproduto>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Multikomerce_Freteproduto>
+    </modules>
+</config> 

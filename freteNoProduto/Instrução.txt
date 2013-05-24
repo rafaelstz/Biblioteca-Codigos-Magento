@@ -1,0 +1,3 @@
+Colocar o código a baixo para puxar o bloco
+
+<?php echo $this->getChildHtml('Multikomerce_Freteproduto_cep') ?>

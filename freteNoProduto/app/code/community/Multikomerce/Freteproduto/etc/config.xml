@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Multikomerce_Freteproduto>
+            <version>1.1.5</version>          
+        </Multikomerce_Freteproduto>
+    </modules>
+    
+   
+    <global>
+        
+ <blocks>
+            <Freteproduto>
+                <class>Multikomerce_Freteproduto_Block</class>
+            </Freteproduto>
+        </blocks>
+       
+    </global>
+    <frontend>      
+        <routers>
+            <Freteproduto>
+                <use>standard</use>
+                <args>
+                    <module>Multikomerce_Freteproduto</module>
+                    <frontName>Freteproduto</frontName>
+                </args>
+            </Freteproduto>
+        </routers>
+        <layout>
+            <updates>
+                <Freteproduto>
+                    <file>Multikomerce_Freteproduto.xml</file>
+                </Freteproduto>
+            </updates>
+        </layout>
+        
+    </frontend>
+    
+ 
+    
+
+   </config>
