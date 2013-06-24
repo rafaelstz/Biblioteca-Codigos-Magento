@@ -8,3 +8,6 @@ Troque
 
 Por
 <?php $_columnCount = 4; ?>
+
+Admin =============================================================================================
+{{block type="catalog/product_list" name="product_list" category_id="3" column_count="6" count="6" limit="4" mode="grid" template="catalog/product/list.phtml"}}
