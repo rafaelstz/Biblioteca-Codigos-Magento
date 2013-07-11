@@ -1,3 +1,11 @@
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^silelohomedecor\.com\.br$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.silelohomedecor\.com\.br$
+RewriteRule ^/?$ "http\:\/\/www\.silelohomedecor\.com\.br\/index\.html" [R=301,L]
+
+
+##========================================== Segunda opção =============================================
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /~nomeSite/
