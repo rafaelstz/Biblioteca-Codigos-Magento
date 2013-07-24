@@ -1,4 +1,4 @@
-Acesse o seguinte arquivo: \app\design\adminhtml\default\default\template\dashboard\graph.phtml
+Acesse o seguinte arquivo: app/design/adminhtml/default/default/template/dashboard/graph.phtml
 
 Procure pela linha: “> getChartUrl(false) ?>” alt=”chart” title=”chart” />
 
