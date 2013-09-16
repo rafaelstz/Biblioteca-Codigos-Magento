@@ -1,0 +1,14 @@
+<FilesMatch ".(html|htm|js|css)$">
+FileETag None
+<ifModule mod_headers.c>
+Header unset ETag
+Header set Keep-Alive "timeout=5, max=100"
+Header set Connection "keep-alive"
+Header set Cache-Control "public, max-age=3153600"
+Header set Vary "Accept-Encoding"
+Header set Encoding "gzip"
+Header set Expires "access plus 1 year"
+Header set Accept-Encoding "gzip"
+Header set Content-Encoding "gzip"
+</ifModule>
+</FilesMatch>
