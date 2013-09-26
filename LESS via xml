@@ -1,0 +1,6 @@
+Add tags in head on local.xml on tamplate ===========================
+
+
+<action method="removeItem"><type>skin_css</type><name>css/styles.css</name></action><!-- remove main stylesheet -->
+<action method="addItem"><type>skin_css</type><name>css/styles.less</name><params>id="less"</params></action><!-- add you less file with id="less" -->
+<action method="addItem"><type>skin_js</type><name>js/less.js</name></action><!-- include less compiler -->
