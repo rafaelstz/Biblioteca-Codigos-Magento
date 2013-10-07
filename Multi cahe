@@ -1,0 +1,52 @@
+colocar o código no topo da index.php da raiz Magento
+=====================================================
+
+$arquivo_tmp = explode("/",$_SERVER["REQUEST_URI"]);
+foreach($arquivo_tmp as $arquivo_tmp2){
+ $arquivo = $arquivo_tmp2;
+}
+
+$tipo = $arquivo_tmp[1]; //tipo pode ser checkout, admin, customer
+$isadmin = $arquivo_tmp[2];
+
+//aqui você deve colocar quais áreas da loja o módulo não deve afetar
+$tipos_proibidos[] = "admin";
+$tipos_proibidos[] = "checkout";
+$tipos_proibidos[] = "customer";
+$tipos_proibidos[] = "onestepcheckout";
+$tipos_proibidos[] = "ajaxcart";
+$tipos_proibidos[] = "komerci";
+
+if($arquivo == ""){
+ $arquivo = "index.php";
+}
+$caminho = str_replace($arquivo,"",$_SERVER["REQUEST_URI"]);
+$path = "/home/shop/public_html/shop/multicache"; //caminho do servidor onde os arquivos cache devem ser gravados
+$url = "http://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+
+//verifica se o tipo está proibido
+
+if(!in_array($tipo, $tipos_proibidos) && !in_array($isadmin, $tipos_proibidos)) {
+ if (file_exists($path.$caminho.$arquivo) && $_SERVER['HTTP_USER_AGENT'] != 'Wget/1.12 (linux-gnu)') {
+ //se o arquivo já existe, ele lê e exibe na tela
+ //ABRE O ARQUIVO TXT
+ $ponteiro = fopen ($path.$caminho.$arquivo,"r");
+ //LÊ O ARQUIVO ATÉCHEGAR AO FIM
+ while (!feof ($ponteiro)) {
+ //LÊ UMALINHA DO ARQUIVO
+ $linha = fgets($ponteiro,4096);
+ //IMPRIME NA TELAO RESULTADO
+ echo $linha;
+ }//FECHA WHILE
+
+//FECHA O PONTEIRO DO ARQUIVO
+ fclose ($ponteiro);
+ exit;
+
+} else {
+ if($_SERVER['HTTP_USER_AGENT'] != 'Wget/1.12 (linux-gnu)'){
+ exec("mkdir -p ".$path.$caminho);
+ exec("wget -O ".$path.$caminho.$arquivo." ".$url);
+ }
+ }
+}
