@@ -2,7 +2,7 @@ Chamada de blocos inteiros
 
 =======================================
 
-<?php echo $this->getLayout()->createBlock('newsletter/subscribe')->setTemplate('newsletter/subscribe.phtml')->toHtml(); ?> 
+<?php echo $this->getLayout()->createBlock('newsletter/subscribe')->setTemplate('newsletter/subscribe.phtml')->toHtml(); ?>
 
 Chamada de blocos estáticos
 
@@ -21,3 +21,5 @@ Aruivos .xml =================
 Arquivos CMS =================
 
 {{block type='cms/block' block_id='identificador'}}
+
+{{block type="core/template" template="catalog/product/special.phtml"}}
