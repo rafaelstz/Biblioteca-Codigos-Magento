@@ -1,0 +1,5 @@
+<?php if (Mage::getSingleton('cms/page')->getIdentifier() == 'home') { ?>
+      <div class="banners clearfix">
+      <?php echo $this->getChildHtml('banners') ?>
+      <?php echo $this->getChildHtml('bannersHome') ?></div>
+<?php } ?>
