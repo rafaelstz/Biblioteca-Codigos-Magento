@@ -35,6 +35,23 @@ jQuery(function(){
 })
 </script>
 
+Cart =================================================
+<script>
+ function changeItemQuantity( id , num ) {
+    var qty_id = "cart[" + id + "][qty]";
+    var currentVal = parseInt( $(qty_id).value );
+    if ( currentVal != NaN  )
+    {
+      if ( currentVal == 1 && num == -1){
+     return ; } else {
+      
+    
+        $(qty_id).value = currentVal + num;
+        $("products-table-basket").submit();
+    }}
+}
+ </script>
+
 no lugar do input que contenha qty (carrinho) ==============================================================================
 
 <input class="input-text qty" id="cart[<?php echo $_item->getId() ?>][qty]" maxlength="12" name="cart[<?php echo $_item->getId() ?>][qty]" size="4" title="<?php echo $this->__('Qty') ?>" value="<?php echo $this->getQty() ?>">
@@ -47,3 +64,7 @@ no lugar do input que contenha qty (product view) ==============================
 <input type="text" name="qty" id="qty" maxlength="3" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
           <a class="use-sprites increment" href="javascript:void(0);" title="<?php echo $this->__('Increment Value')?>"><?php echo $this->__('Increment Value')?></a>
           <a class="use-sprites decrement" href="javascript:void(0);" title="<?php echo $this->__('Decrement Value')?>"><?php echo $this->__('Decrement Value')?></a>
+
+Topo Form ==============================================================================
+
+<form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post" id="products-table-basket">
