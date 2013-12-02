@@ -1,0 +1,49 @@
+Fim do template/checkout/cart.phtml e do product view =================================
+
+ <script type="text/javascript">
+jQuery(function(){
+ $box = jQuery('.add-to-cart input.qty');
+ resetValue();
+
+ jQuery($box).blur(function(){
+  if(!jQuery(this).val() || (jQuery(this).val() <=0) || !jQuery.isNumeric(jQuery(this).val())) {
+   jQuery(this).val(1);
+  }
+ });
+
+ jQuery('.add-to-cart .increment').click(function(){
+  $value++;
+  updateQtyBox();
+ });
+
+ jQuery('.add-to-cart .decrement').click(function(){
+  if($value >= 2) {
+   $value--;
+  }
+  updateQtyBox();
+ });
+
+ function resetValue()
+ {
+  $value = Number(jQuery($box).val());
+ }
+
+ function updateQtyBox()
+ {
+  jQuery($box).val($value);
+ }
+})
+</script>
+
+no lugar do input que contenha qty (carrinho) ==============================================================================
+
+<input class="input-text qty" id="cart[<?php echo $_item->getId() ?>][qty]" maxlength="12" name="cart[<?php echo $_item->getId() ?>][qty]" size="4" title="<?php echo $this->__('Qty') ?>" value="<?php echo $this->getQty() ?>">
+
+   <a href="" onclick="changeItemQuantity( <?php echo $_item->getId() ?>, 1 ); return false;" class="qty-up"></a>
+   <a href="" onclick="changeItemQuantity( <?php echo $_item->getId() ?>, -1 ); return false;" class="qty-down" ></a>
+   
+no lugar do input que contenha qty (product view) ==============================================================================
+
+<input type="text" name="qty" id="qty" maxlength="3" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+          <a class="use-sprites increment" href="javascript:void(0);" title="<?php echo $this->__('Increment Value')?>"><?php echo $this->__('Increment Value')?></a>
+          <a class="use-sprites decrement" href="javascript:void(0);" title="<?php echo $this->__('Decrement Value')?>"><?php echo $this->__('Decrement Value')?></a>
