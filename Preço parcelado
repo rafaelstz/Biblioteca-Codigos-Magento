@@ -1,0 +1,14 @@
+== catalog/product/price.phtml == linha 207            
+            <div class="parcelamento">
+                    <?php
+                    $valor_produto = $_product->getFinalPrice();
+                    $parcela_minima = 10; //valor
+                    $parcela_max = 6; //qtd de parcelas
+
+                    while( ($valor_produto / $parcela_max)  < $parcela_minima){
+                    $parcela_max--;
+                    }
+                    $valor_final = number_format(($valor_produto/$parcela_max),2,',',',');
+                    echo sprintf('%dx R$%s sem juros', $parcela_max, $valor_final);
+                    ?>
+                </div>
