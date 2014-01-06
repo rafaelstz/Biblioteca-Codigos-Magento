@@ -1,12 +1,12 @@
 ============original========================
 <?php
-				/*inicializando o código*/
+				/*inicializando o cï¿½digo*/
 				 
-				/*Script que "cumprimenta" o usuário na página. Bom dia, Boa tarde,etc*/
+				/*Script que "cumprimenta" o usuï¿½rio na pï¿½gina. Bom dia, Boa tarde,etc*/
 				 
 				$hora_do_dia=date('H');
 				 
-				/*uso de condicionais, poderíamos utilizar o switch também*/
+				/*uso de condicionais, poderï¿½amos utilizar o switch tambï¿½m*/
 				 
 				if (($hora_do_dia >=6) && ($hora_do_dia <=12)) echo "Bom Dia, ";
 				if (($hora_do_dia >12) && ($hora_do_dia <=18)) echo "Boa Tarde, ";
@@ -23,13 +23,13 @@
 ============modificado========================
 
 <?php
-				/*inicializando o código*/
+				/*inicializando o cï¿½digo*/
 				 
-				/*Script que "cumprimenta" o usuário na página. Bom dia, Boa tarde,etc*/
+				/*Script que "cumprimenta" o usuï¿½rio na pï¿½gina. Bom dia, Boa tarde,etc*/
 				 
 				$hora_do_dia=date('H');
 				 
-				/*uso de condicionais, poderíamos utilizar o switch também*/
+				/*uso de condicionais, poderï¿½amos utilizar o switch tambï¿½m*/
 				 
 				if (($hora_do_dia >=11) && ($hora_do_dia <=17)) echo "Bom Dia, ";
 				if (($hora_do_dia >17) && ($hora_do_dia <=23)) echo "Boa Tarde, ";
@@ -41,4 +41,13 @@
 
 						else
 						{echo '<a href="'.$this->getBaseUrl().'customer/account/login/">Fazer login</a> ou <a href="'.$this->getBaseUrl().'customer/account/create/">Cadastrar-se</a>';}
-				?>	
+				?>
+				
+============modificado========================			
+
+<?php $logado = $this->helper('customer')->isLoggedIn(); ?>
+<?php if(!$logado): ?>
+      //nao logado
+<?php else: ?>
+     //logado
+<?php endif; ?>
