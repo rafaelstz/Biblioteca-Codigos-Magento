@@ -22,4 +22,6 @@ Arquivos CMS =================
 
 {{block type='cms/block' block_id='identificador'}}
 
+{{block type="catalog/product_list" name="product_list" category_id="3" column_count="6" count="6" limit="4" mode="grid" template="catalog/product/list.phtml"}}
+
 {{block type="core/template" template="catalog/product/special.phtml"}}
