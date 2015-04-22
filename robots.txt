@@ -1,4 +1,5 @@
 # robots.txt generated at http://www.mcanerin.com
+Sitemap: http://www.seusite.com.br/sitemap.txt
 User-agent: Googlebot
 Disallow: 
 User-agent: googlebot-image
@@ -40,4 +41,3 @@ Disallow:
 User-agent: *
 Disallow: 
 Disallow: /cgi-bin/
-Sitemap: http://www.seusite.com.br/sitemap.txt
