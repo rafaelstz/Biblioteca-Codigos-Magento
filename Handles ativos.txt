@@ -1,0 +1,5 @@
+Em qualquer lugar inserir o código abaixo para ver quais handles XML foram acionados:
+
+<pre>
+<?php var_dump(Mage::app()->getLayout()->getUpdate()->getHandles()); ?>
+</pre>
